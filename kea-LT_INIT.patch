@@ -1,0 +1,27 @@
+From 6074b8696f4196fc0a88994ff9f210f54ae4cebf Mon Sep 17 00:00:00 2001
+From: Jiri Popelka <jpopelka@redhat.com>
+Date: Mon, 18 Aug 2014 12:30:24 +0200
+Subject: [PATCH] configure.ac: AC_PROG_LIBTOOL is deprecated in favor of
+ LT_INIT
+
+http://www.gnu.org/software/libtool/manual/html_node/LT_005fINIT.html
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index f0dbc4f..43d7b29 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -79,7 +79,7 @@ CFLAGS_SAVED=$CFLAGS
+ CXXFLAGS_SAVED=$CXXFLAGS
+ CFLAGS="$CFLAGS $CXX_LIBTOOL_LDFLAGS"
+ CXXFLAGS="$CXXFLAGS $CXX_LIBTOOL_LDFLAGS"
+-AC_PROG_LIBTOOL
++LT_INIT
+ CFLAGS=$CFLAGS_SAVED
+ CXXFLAGS=$CXXFLAGS_SAVED
+ 
+-- 
+1.9.3
+
