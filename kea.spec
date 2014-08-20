@@ -10,13 +10,10 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  0.9
-Release:  0.3.%{prever}%{?dist}
+Release:  0.4.%{prever}%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
-Source1:  kea-dhcp4.service
-Source2:  kea-dhcp6.service
-Source3:  kea-dhcp-ddns.service
 
 # http://kea.isc.org/ticket/3523
 Patch0:   kea-data-dir.patch
@@ -24,15 +21,29 @@ Patch0:   kea-data-dir.patch
 Patch1:   kea-LT_INIT.patch
 # http://kea.isc.org/ticket/3526
 Patch2:   kea-narrowing.patch
+# http://kea.isc.org/ticket/3529
+Patch3:   kea-systemd.patch
 
+# autoreconf
 BuildRequires: autoconf automake libtool
 BuildRequires: boost-devel
+# %%configure --with-openssl
 BuildRequires: openssl-devel
+# %%configure --with-dhcp-mysql
+BuildRequires: mariadb-devel
+# %%configure --with-dhcp-pgsql
+BuildRequires: postgresql-devel
 BuildRequires: log4cplus-devel
 BuildRequires: valgrind-devel
 BuildRequires: systemd
 # src/lib/testutils/dhcp_test_lib.sh
 BuildRequires: procps-ng
+
+
+# %%configure --enable-gtest
+BuildRequires: gtest-devel
+# in case you ever wanted to use %%configure --enable-generate-docs
+#BuildRequires: elinks asciidoc plantuml
 
 Requires: kea-libs%{?_isa} = %{version}-%{release}
 Requires(post): systemd
@@ -67,6 +78,7 @@ Header files and API documentation.
 %patch0 -p1 -b .data-dir
 %patch1 -p1 -b .LT
 %patch2 -p1 -b .narrowing
+%patch3 -p1 -b .systemd
 
 %build
 autoreconf --verbose --force --install
@@ -74,8 +86,12 @@ autoreconf --verbose --force --install
 %configure \
     --disable-silent-rules \
     --disable-static \
+    --enable-systemd \
     --with-openssl \
+    --with-dhcp-mysql \
+    --with-dhcp-pgsql \
     --disable-rpath \
+    --enable-gtest \
     --enable-debug
 
 make %{?_smp_mflags}
@@ -95,17 +111,6 @@ rm -f %{buildroot}%{_libdir}/libkea-*.la
 mkdir -p %{buildroot}%{_sharedstatedir}/kea/
 touch %{buildroot}%{_sharedstatedir}/kea/kea-leases4.csv
 touch %{buildroot}%{_sharedstatedir}/kea/kea-leases6.csv
-
-# Copy sample config files
-install -p -m 644 doc/examples/kea4/single-subnet.json %{buildroot}%{_sysconfdir}/kea/dhcp4.json
-install -p -m 644 doc/examples/kea6/simple.json %{buildroot}%{_sysconfdir}/kea/dhcp6.json
-install -p -m 644 doc/examples/ddns/template.json %{buildroot}%{_sysconfdir}/kea/dhcp-ddns.json
-
-# systemd unit files
-mkdir -p %{buildroot}%{_unitdir}
-install -p -m 644 %{SOURCE1} %{buildroot}%{_unitdir}
-install -p -m 644 %{SOURCE2} %{buildroot}%{_unitdir}
-install -p -m 644 %{SOURCE3} %{buildroot}%{_unitdir}
 
 install -p -m 644 ext/LICENSE_1_0.txt %{buildroot}%{_defaultdocdir}/kea/
 
@@ -138,9 +143,6 @@ install -p -m 644 ext/LICENSE_1_0.txt %{buildroot}%{_defaultdocdir}/kea/
 %dir %{_sysconfdir}/kea/
 %config(noreplace) %{_sysconfdir}/kea/kea.conf
 %config(noreplace) %{_sysconfdir}/kea/keactrl.conf
-%config(noreplace) %{_sysconfdir}/kea/dhcp4.json
-%config(noreplace) %{_sysconfdir}/kea/dhcp6.json
-%config(noreplace) %{_sysconfdir}/kea/dhcp-ddns.json
 %dir %{_datarootdir}/kea/
 %{_datarootdir}/kea/dhcp-ddns.spec
 %{_datarootdir}/kea/dhcp4.spec
@@ -202,6 +204,11 @@ install -p -m 644 ext/LICENSE_1_0.txt %{buildroot}%{_defaultdocdir}/kea/
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Wed Aug 20 2014 Jiri Popelka <jpopelka@redhat.com> - 0.9-0.4.beta1
+- install systemd service units with a proper patch that we can send upstream
+- build with MySQL & PostgreSQL & Google Test
+- no need to copy sample configuration, /etc/kea/kea.conf already contains one
+
 * Tue Aug 19 2014 Jiri Popelka <jpopelka@redhat.com> - 0.9-0.3.beta1
 - comment patches
 - use --preserve-timestamps with install
