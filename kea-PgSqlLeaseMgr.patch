@@ -1,0 +1,64 @@
+From c278765bba1b6db3b3d0b82839b7f8e6813add1c Mon Sep 17 00:00:00 2001
+From: Jiri Popelka <jpopelka@redhat.com>
+Date: Thu, 21 Aug 2014 18:37:26 +0200
+Subject: [PATCH] Fix building of PgSqlLeaseMgr on i686
+
+pgsql_lease_mgr.cc: In member function 'isc::dhcp::Lease4Ptr isc::dhcp::PgSqlLease4Exchange::convertFromDatabase(PGresult*&, int)':
+pgsql_lease_mgr.cc:667:68: error: no matching function for call to 'isc::dhcp::PgSqlLease4Exchange::convertFromBytea(PGresult*&, int&, const size_t&, uint8_t [20], unsigned int, long unsigned int&)'
+                              sizeof(hwaddr_buffer_), hwaddr_length_);
+                                                                    ^
+pgsql_lease_mgr.cc:667:68: note: candidate is:
+pgsql_lease_mgr.cc:476:10: note: void isc::dhcp::PgSqlLeaseExchange::convertFromBytea(PGresult*&, int, size_t, uint8_t*, size_t, size_t&)
+     void convertFromBytea(PGresult*& r, const int row, const size_t col,
+          ^
+pgsql_lease_mgr.cc:476:10: note:   no known conversion for argument 6 from 'long unsigned int' to 'size_t& {aka unsigned int&}'
+pgsql_lease_mgr.cc:670:74: error: no matching function for call to 'isc::dhcp::PgSqlLease4Exchange::convertFromBytea(PGresult*&, int&, const size_t&, uint8_t [128], unsigned int, long unsigned int&)'
+                              sizeof(client_id_buffer_), client_id_length_);
+                                                                          ^
+pgsql_lease_mgr.cc:670:74: note: candidate is:
+pgsql_lease_mgr.cc:476:10: note: void isc::dhcp::PgSqlLeaseExchange::convertFromBytea(PGresult*&, int, size_t, uint8_t*, size_t, size_t&)
+     void convertFromBytea(PGresult*& r, const int row, const size_t col,
+          ^
+pgsql_lease_mgr.cc:476:10: note:   no known conversion for argument 6 from 'long unsigned int' to 'size_t& {aka unsigned int&}'
+pgsql_lease_mgr.cc: In member function 'isc::dhcp::Lease6Ptr isc::dhcp::PgSqlLease6Exchange::convertFromDatabase(PGresult*&, int)':
+pgsql_lease_mgr.cc:843:64: error: no matching function for call to 'isc::dhcp::PgSqlLease6Exchange::convertFromBytea(PGresult*&, int&, const int&, uint8_t [128], unsigned int, long unsigned int&)'
+                              sizeof(duid_buffer_), duid_length_);
+                                                                ^
+pgsql_lease_mgr.cc:843:64: note: candidate is:
+pgsql_lease_mgr.cc:476:10: note: void isc::dhcp::PgSqlLeaseExchange::convertFromBytea(PGresult*&, int, size_t, uint8_t*, size_t, size_t&)
+     void convertFromBytea(PGresult*& r, const int row, const size_t col,
+          ^
+pgsql_lease_mgr.cc:476:10: note:   no known conversion for argument 6 from 'long unsigned int' to 'size_t& {aka unsigned int&}'
+---
+ src/lib/dhcpsrv/pgsql_lease_mgr.cc | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/lib/dhcpsrv/pgsql_lease_mgr.cc b/src/lib/dhcpsrv/pgsql_lease_mgr.cc
+index 430783c..6a060f0 100644
+--- a/src/lib/dhcpsrv/pgsql_lease_mgr.cc
++++ b/src/lib/dhcpsrv/pgsql_lease_mgr.cc
+@@ -703,10 +703,10 @@ private:
+ 
+     /// @Brief Lease4 specific members used for binding and conversion.
+     uint32_t        addr4_;
+-    unsigned long   hwaddr_length_;
++    size_t          hwaddr_length_;
+     std::vector<uint8_t> hwaddr_;
+     uint8_t         hwaddr_buffer_[HWAddr::MAX_HWADDR_LEN];
+-    unsigned long   client_id_length_;
++    size_t          client_id_length_;
+     uint8_t         client_id_buffer_[ClientId::MAX_CLIENT_ID_LEN];
+ };
+ 
+@@ -907,7 +907,7 @@ private:
+ 
+     /// @brief Lease6 specific members for binding and conversion.
+     //@{
+-    unsigned long   duid_length_;
++    size_t          duid_length_;
+     vector<uint8_t> duid_;
+     uint8_t         duid_buffer_[DUID::MAX_DUID_LEN];
+     uint32_t        iaid_;
+-- 
+1.9.3
+

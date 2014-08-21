@@ -10,13 +10,13 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  0.9
-Release:  0.4.%{prever}%{?dist}
+Release:  0.5.%{prever}%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
 
-# http://kea.isc.org/ticket/3523
-Patch0:   kea-data-dir.patch
+# http://kea.isc.org/ticket/3532
+Patch0:   kea-PgSqlLeaseMgr.patch
 # http://kea.isc.org/ticket/3525
 Patch1:   kea-LT_INIT.patch
 # http://kea.isc.org/ticket/3526
@@ -75,7 +75,7 @@ Header files and API documentation.
 %prep
 %setup -q -n kea-%{VERSION}
 
-%patch0 -p1 -b .data-dir
+%patch0 -p1 -b .i686
 %patch1 -p1 -b .LT
 %patch2 -p1 -b .narrowing
 %patch3 -p1 -b .systemd
@@ -83,7 +83,9 @@ Header files and API documentation.
 %build
 autoreconf --verbose --force --install
 
+# --localstatedir=%%{_sharedstatedir} - http://kea.isc.org/ticket/3523
 %configure \
+    --localstatedir=%{_sharedstatedir} \
     --disable-silent-rules \
     --disable-static \
     --enable-systemd \
@@ -204,6 +206,10 @@ install -p -m 644 ext/LICENSE_1_0.txt %{buildroot}%{_defaultdocdir}/kea/
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Thu Aug 21 2014 Jiri Popelka <jpopelka@redhat.com> - 0.9-0.5.beta1
+- fix building with PostgreSQL on i686
+- redefine localstatedir to sharedstatedir (kea#3523)
+
 * Wed Aug 20 2014 Jiri Popelka <jpopelka@redhat.com> - 0.9-0.4.beta1
 - install systemd service units with a proper patch that we can send upstream
 - build with MySQL & PostgreSQL & Google Test
@@ -212,7 +218,6 @@ install -p -m 644 ext/LICENSE_1_0.txt %{buildroot}%{_defaultdocdir}/kea/
 * Tue Aug 19 2014 Jiri Popelka <jpopelka@redhat.com> - 0.9-0.3.beta1
 - comment patches
 - use --preserve-timestamps with install
-
 
 * Mon Aug 18 2014 Jiri Popelka <jpopelka@redhat.com> - 0.9-0.2.beta1
 - make it build on armv7
