@@ -4,25 +4,19 @@
 %global prever beta1
 
 #%%global VERSION %{version}-%{patchver}
-#%%global VERSION %{version}
-%global VERSION %{version}-%{prever}
+#%%global VERSION %{version}-%{prever}
+%global VERSION %{version}
 
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  0.9
-Release:  0.5.%{prever}%{?dist}
+Release:  1%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
 
-# http://kea.isc.org/ticket/3532
-Patch0:   kea-PgSqlLeaseMgr.patch
-# http://kea.isc.org/ticket/3525
-Patch1:   kea-LT_INIT.patch
-# http://kea.isc.org/ticket/3526
-Patch2:   kea-narrowing.patch
 # http://kea.isc.org/ticket/3529
-Patch3:   kea-systemd.patch
+Patch0:   kea-systemd.patch
 
 # autoreconf
 BuildRequires: autoconf automake libtool
@@ -75,10 +69,7 @@ Header files and API documentation.
 %prep
 %setup -q -n kea-%{VERSION}
 
-%patch0 -p1 -b .i686
-%patch1 -p1 -b .LT
-%patch2 -p1 -b .narrowing
-%patch3 -p1 -b .systemd
+%patch0 -p1 -b .systemd
 
 %build
 autoreconf --verbose --force --install
@@ -206,6 +197,9 @@ install -p -m 644 ext/LICENSE_1_0.txt %{buildroot}%{_defaultdocdir}/kea/
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Mon Sep 01 2014 Jiri Popelka <jpopelka@redhat.com> - 0.9-1
+- 0.9
+
 * Thu Aug 21 2014 Jiri Popelka <jpopelka@redhat.com> - 0.9-0.5.beta1
 - fix building with PostgreSQL on i686
 - redefine localstatedir to sharedstatedir (kea#3523)
