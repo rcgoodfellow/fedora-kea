@@ -10,7 +10,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  0.9
-Release:  1%{?dist}
+Release:  2%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -28,7 +28,9 @@ BuildRequires: mariadb-devel
 # %%configure --with-dhcp-pgsql
 BuildRequires: postgresql-devel
 BuildRequires: log4cplus-devel
+%ifarch %{ix86} x86_64 ppc ppc64 ppc64le s390x armv7hl aarch64
 BuildRequires: valgrind-devel
+%endif
 BuildRequires: systemd
 # src/lib/testutils/dhcp_test_lib.sh
 BuildRequires: procps-ng
@@ -197,6 +199,9 @@ install -p -m 644 ext/LICENSE_1_0.txt %{buildroot}%{_defaultdocdir}/kea/
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Wed Sep 24 2014 Dan Horák <dan[at]danny.cz> - 0.9-2
+- valgrind available only on selected arches
+
 * Mon Sep 01 2014 Jiri Popelka <jpopelka@redhat.com> - 0.9-1
 - 0.9
 
