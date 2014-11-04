@@ -10,7 +10,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  0.9
-Release:  2%{?dist}
+Release:  3%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -73,12 +73,14 @@ Header files and API documentation.
 
 %patch0 -p1 -b .systemd
 
+# install leases db in /var/lib/kea/ not /var/kea/
+# http://kea.isc.org/ticket/3523
+sed -i -e 's|@localstatedir@|@sharedstatedir@|g' src/lib/dhcpsrv/Makefile.am
+
 %build
 autoreconf --verbose --force --install
 
-# --localstatedir=%%{_sharedstatedir} - http://kea.isc.org/ticket/3523
 %configure \
-    --localstatedir=%{_sharedstatedir} \
     --disable-silent-rules \
     --disable-static \
     --enable-systemd \
@@ -199,6 +201,9 @@ install -p -m 644 ext/LICENSE_1_0.txt %{buildroot}%{_defaultdocdir}/kea/
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Tue Nov 04 2014 Jiri Popelka <jpopelka@redhat.com> - 0.9-3
+- do not override @localstatedir@ globally
+
 * Wed Sep 24 2014 Dan Horák <dan[at]danny.cz> - 0.9-2
 - valgrind available only on selected arches
 
