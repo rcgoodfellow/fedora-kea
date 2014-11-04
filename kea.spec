@@ -15,6 +15,9 @@ License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
 
+# TODO: remove this with 1.0
+Source1:  kea.conf.pre
+
 # http://kea.isc.org/ticket/3529
 Patch0:   kea-systemd.patch
 
@@ -111,6 +114,8 @@ touch %{buildroot}%{_sharedstatedir}/kea/kea-leases6.csv
 
 install -p -m 644 ext/LICENSE_1_0.txt %{buildroot}%{_defaultdocdir}/kea/
 
+install -p -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/kea/kea.conf
+
 %post
 %systemd_post kea-dhcp4.service kea-dhcp6.service kea-dhcp-ddns.service
 
@@ -203,6 +208,7 @@ install -p -m 644 ext/LICENSE_1_0.txt %{buildroot}%{_defaultdocdir}/kea/
 %changelog
 * Tue Nov 04 2014 Jiri Popelka <jpopelka@redhat.com> - 0.9-3
 - do not override @localstatedir@ globally
+- include latest upstream kea.conf
 
 * Wed Sep 24 2014 Dan Horák <dan[at]danny.cz> - 0.9-2
 - valgrind available only on selected arches
