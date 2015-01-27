@@ -10,7 +10,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  0.9
-Release:  3%{?dist}
+Release:  4%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -206,6 +206,9 @@ install -p -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/kea/kea.conf
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Tue Jan 27 2015 Petr Machata <pmachata@redhat.com> - 0.9-4
+- Rebuild for boost 1.57.0
+
 * Tue Nov 04 2014 Jiri Popelka <jpopelka@redhat.com> - 0.9-3
 - do not override @localstatedir@ globally
 - include latest upstream kea.conf
