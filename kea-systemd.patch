@@ -63,8 +63,8 @@ index a2d2a82..05b1c9e 100644
 --- a/src/bin/keactrl/Makefile.am
 +++ b/src/bin/keactrl/Makefile.am
 @@ -31,9 +31,36 @@ endif
- kea.conf: kea.conf.in
- 	$(top_srcdir)/tools/path_replacer.sh $< $@
+ kea.conf: kea.conf.pre
+ 	$(top_srcdir)/tools/path_replacer.sh $(top_srcdir)/src/bin/keactrl/kea.conf.pre $@
  
 +INSTALL_TARGETS = install-empty
 +

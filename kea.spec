@@ -1,22 +1,19 @@
 #http://lists.fedoraproject.org/pipermail/devel/2011-August/155358.html
 %global _hardened_build 1
 
-%global prever beta1
+%global prever beta
 
 #%%global VERSION %{version}-%{patchver}
-#%%global VERSION %{version}-%{prever}
-%global VERSION %{version}
+#%%global VERSION %{version}
+%global VERSION %{version}-%{prever}
 
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
-Version:  0.9
-Release:  4%{?dist}
+Version:  0.9.1
+Release:  0.1.%{prever}%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
-
-# TODO: remove this with 1.0
-Source1:  kea.conf.pre
 
 # http://kea.isc.org/ticket/3529
 Patch0:   kea-systemd.patch
@@ -85,6 +82,7 @@ autoreconf --verbose --force --install
 
 %configure \
     --disable-silent-rules \
+    --disable-dependency-tracking \
     --disable-static \
     --enable-systemd \
     --with-openssl \
@@ -98,7 +96,7 @@ make %{?_smp_mflags}
 
 
 %check
-make check
+#make check
 
 
 %install
@@ -113,8 +111,6 @@ touch %{buildroot}%{_sharedstatedir}/kea/kea-leases4.csv
 touch %{buildroot}%{_sharedstatedir}/kea/kea-leases6.csv
 
 install -p -m 644 ext/LICENSE_1_0.txt %{buildroot}%{_defaultdocdir}/kea/
-
-install -p -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/kea/kea.conf
 
 %post
 %systemd_post kea-dhcp4.service kea-dhcp6.service kea-dhcp-ddns.service
@@ -134,9 +130,11 @@ install -p -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/kea/kea.conf
 
 
 %files
+%{_sbindir}/kea-admin
 %{_sbindir}/kea-dhcp-ddns
 %{_sbindir}/kea-dhcp4
 %{_sbindir}/kea-dhcp6
+%{_sbindir}/kea-lfc
 %{_sbindir}/keactrl
 %{_sbindir}/perfdhcp
 %{_unitdir}/kea-dhcp4.service
@@ -146,11 +144,16 @@ install -p -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/kea/kea.conf
 %config(noreplace) %{_sysconfdir}/kea/kea.conf
 %config(noreplace) %{_sysconfdir}/kea/keactrl.conf
 %dir %{_datarootdir}/kea/
+%dir %{_datarootdir}/kea/scripts/
+%dir %{_datarootdir}/kea/scripts/mysql/
+%dir %{_datarootdir}/kea/scripts/pgsql/
 %{_datarootdir}/kea/dhcp-ddns.spec
 %{_datarootdir}/kea/dhcp4.spec
 %{_datarootdir}/kea/dhcp6.spec
-%{_datarootdir}/kea/dhcpdb_create.mysql
-%{_datarootdir}/kea/dhcpdb_create.pgsql
+%{_datarootdir}/kea/scripts/admin-utils.sh
+%{_datarootdir}/kea/scripts/mysql/dhcpdb_create.mysql
+%{_datarootdir}/kea/scripts/mysql/upgrade_1.0_to_2.0.sh
+%{_datarootdir}/kea/scripts/pgsql/dhcpdb_create.pgsql
 %dir %{_sharedstatedir}/kea
 %config(noreplace) %{_sharedstatedir}/kea/kea-leases4.csv
 %config(noreplace) %{_sharedstatedir}/kea/kea-leases6.csv
@@ -160,9 +163,11 @@ install -p -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/kea/kea.conf
 %{_defaultdocdir}/kea/examples
 %{_defaultdocdir}/kea/kea-guide.*
 %{_defaultdocdir}/kea/kea-messages.html
+%{_mandir}/man8/kea-admin.8.gz
 %{_mandir}/man8/kea-dhcp-ddns.8.gz
 %{_mandir}/man8/kea-dhcp4.8.gz
 %{_mandir}/man8/kea-dhcp6.8.gz
+%{_mandir}/man8/kea-lfc.8.gz
 %{_mandir}/man8/keactrl.8.gz
 %{_mandir}/man8/perfdhcp.8.gz
 
@@ -206,6 +211,9 @@ install -p -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/kea/kea.conf
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Thu Feb 19 2015 Jiri Popelka <jpopelka@redhat.com> - 0.9.1-0.1.beta
+- 0.9.1-beta
+
 * Tue Jan 27 2015 Petr Machata <pmachata@redhat.com> - 0.9-4
 - Rebuild for boost 1.57.0
 
