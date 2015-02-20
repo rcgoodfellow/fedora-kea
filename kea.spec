@@ -10,7 +10,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  0.9.1
-Release:  0.1.%{prever}%{?dist}
+Release:  0.2.%{prever}%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -112,6 +112,19 @@ touch %{buildroot}%{_sharedstatedir}/kea/kea-leases6.csv
 
 install -p -m 644 ext/LICENSE_1_0.txt %{buildroot}%{_defaultdocdir}/kea/
 
+mkdir -p %{buildroot}/run
+install -d -m 0755 %{buildroot}/run/kea/
+
+# install /usr/lib/tmpfiles.d/kea.conf
+mkdir -p %{buildroot}%{_tmpfilesdir}
+cat > %{buildroot}%{_tmpfilesdir}/kea.conf <<EOF
+# kea needs existing /run/kea/ to create logger_lockfile there
+# See tmpfiles.d(5) for details
+
+d /run/kea 0755 root root -
+EOF
+
+
 %post
 %systemd_post kea-dhcp4.service kea-dhcp6.service kea-dhcp-ddns.service
 
@@ -147,6 +160,8 @@ install -p -m 644 ext/LICENSE_1_0.txt %{buildroot}%{_defaultdocdir}/kea/
 %dir %{_datarootdir}/kea/scripts/
 %dir %{_datarootdir}/kea/scripts/mysql/
 %dir %{_datarootdir}/kea/scripts/pgsql/
+%dir /run/kea/
+%{_tmpfilesdir}/kea.conf
 %{_datarootdir}/kea/dhcp-ddns.spec
 %{_datarootdir}/kea/dhcp4.spec
 %{_datarootdir}/kea/dhcp6.spec
@@ -211,6 +226,9 @@ install -p -m 644 ext/LICENSE_1_0.txt %{buildroot}%{_defaultdocdir}/kea/
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Fri Feb 20 2015 Jiri Popelka <jpopelka@redhat.com> - 0.9.1-0.2.beta
+- /run/kea/ (for logger_lockfile)
+
 * Thu Feb 19 2015 Jiri Popelka <jpopelka@redhat.com> - 0.9.1-0.1.beta
 - 0.9.1-beta
 
