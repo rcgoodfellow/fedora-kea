@@ -4,13 +4,13 @@
 %global prever beta
 
 #%%global VERSION %{version}-%{patchver}
-#%%global VERSION %{version}
-%global VERSION %{version}-%{prever}
+#%%global VERSION %{version}-%{prever}
+%global VERSION %{version}
 
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  0.9.1
-Release:  0.2.%{prever}%{?dist}
+Release:  1%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -226,6 +226,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Wed Apr 01 2015 Jiri Popelka <jpopelka@redhat.com> - 0.9.1-1
+- 0.9.1
+
 * Fri Feb 20 2015 Jiri Popelka <jpopelka@redhat.com> - 0.9.1-0.2.beta
 - /run/kea/ (for logger_lockfile)
 
