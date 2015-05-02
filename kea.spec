@@ -10,7 +10,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  0.9.1
-Release:  1%{?dist}
+Release:  2%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -226,6 +226,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Sat May 02 2015 Kalev Lember <kalevlember@gmail.com> - 0.9.1-2
+- Rebuilt for GCC 5 C++11 ABI change
+
 * Wed Apr 01 2015 Jiri Popelka <jpopelka@redhat.com> - 0.9.1-1
 - 0.9.1
 
