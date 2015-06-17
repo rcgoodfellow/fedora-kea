@@ -10,7 +10,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  0.9.1
-Release:  2%{?dist}
+Release:  3%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -226,6 +226,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
 * Sat May 02 2015 Kalev Lember <kalevlember@gmail.com> - 0.9.1-2
 - Rebuilt for GCC 5 C++11 ABI change
 
