@@ -186,8 +186,8 @@ index 43d7bff..82625ca 100644
  echo "Input file: $1"
  echo "Output file: $2"
  
--sed -e "s+\@localstatedir\@+${localstatedir}+g; s+\@prefix@+${prefix}+g; s+\@sysconfdir@+${sysconfdir}+g" $1 > $2
-+sed -e "s+\@localstatedir\@+${localstatedir}+g; s+\@prefix\@+${prefix}+g; s+\@sysconfdir\@+${sysconfdir}+g; s+\@sbindir\@+${sbindir}+g" $1 > $2
+-sed -e "s@SEP@\@localstatedir\@@SEP@${localstatedir}@SEP@g; s@SEP@\@prefix@@SEP@${prefix}@SEP@g; s@SEP@\@sysconfdir@@SEP@${sysconfdir}@SEP@g" $1 > $2
++sed -e "s@SEP@\@localstatedir\@@SEP@${localstatedir}@SEP@g; s@SEP@\@prefix\@@SEP@${prefix}@SEP@g; s@SEP@\@sysconfdir\@@SEP@${sysconfdir}@SEP@g; s@SEP@\@sbindir\@@SEP@${sbindir}@SEP@g" $1 > $2
 -- 
 2.3.4
 

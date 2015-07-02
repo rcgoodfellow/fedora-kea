@@ -4,13 +4,13 @@
 %global prever beta
 
 #%%global VERSION %{version}-%{patchver}
-#%%global VERSION %{version}-%{prever}
-%global VERSION %{version}
+#%%global VERSION %{version}
+%global VERSION %{version}-%{prever}
 
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
-Version:  0.9.1
-Release:  3%{?dist}
+Version:  0.9.2
+Release:  0.1.%{prever}%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -36,8 +36,6 @@ BuildRequires: systemd
 BuildRequires: procps-ng
 
 
-# %%configure --enable-gtest
-BuildRequires: gtest-devel
 # in case you ever wanted to use %%configure --enable-generate-docs
 #BuildRequires: elinks asciidoc plantuml
 
@@ -89,7 +87,6 @@ autoreconf --verbose --force --install
     --with-dhcp-mysql \
     --with-dhcp-pgsql \
     --disable-rpath \
-    --enable-gtest \
     --enable-debug
 
 make %{?_smp_mflags}
@@ -150,6 +147,7 @@ EOF
 %{_sbindir}/kea-lfc
 %{_sbindir}/keactrl
 %{_sbindir}/perfdhcp
+%{_bindir}/message
 %{_unitdir}/kea-dhcp4.service
 %{_unitdir}/kea-dhcp6.service
 %{_unitdir}/kea-dhcp-ddns.service
@@ -166,9 +164,8 @@ EOF
 %{_datarootdir}/kea/dhcp4.spec
 %{_datarootdir}/kea/dhcp6.spec
 %{_datarootdir}/kea/scripts/admin-utils.sh
-%{_datarootdir}/kea/scripts/mysql/dhcpdb_create.mysql
-%{_datarootdir}/kea/scripts/mysql/upgrade_1.0_to_2.0.sh
-%{_datarootdir}/kea/scripts/pgsql/dhcpdb_create.pgsql
+%{_datarootdir}/kea/scripts/mysql
+%{_datarootdir}/kea/scripts/pgsql
 %dir %{_sharedstatedir}/kea
 %config(noreplace) %{_sharedstatedir}/kea/kea-leases4.csv
 %config(noreplace) %{_sharedstatedir}/kea/kea-leases6.csv
@@ -202,6 +199,7 @@ EOF
 %{_libdir}/libkea-exceptions.so.*
 %{_libdir}/libkea-hooks.so.*
 %{_libdir}/libkea-log.so.*
+%{_libdir}/libkea-stats.so.*
 %{_libdir}/libkea-threads.so.*
 %{_libdir}/libkea-util-io.so.*
 %{_libdir}/libkea-util.so.*
@@ -220,12 +218,16 @@ EOF
 %{_libdir}/libkea-exceptions.so
 %{_libdir}/libkea-hooks.so
 %{_libdir}/libkea-log.so
+%{_libdir}/libkea-stats.so
 %{_libdir}/libkea-threads.so
 %{_libdir}/libkea-util-io.so
 %{_libdir}/libkea-util.so
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Thu Jul 02 2015 Jiri Popelka <jpopelka@redhat.com> - 0.9.2-0.1.beta
+- 0.9.2-beta
+
 * Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
