@@ -7,9 +7,10 @@
 #%%global VERSION %{version}-%{prever}
 %global VERSION %{version}
 
+
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
-Version:  0.9.1
+Version:  0.9.2
 Release:  1%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
@@ -35,9 +36,9 @@ BuildRequires: systemd
 # src/lib/testutils/dhcp_test_lib.sh
 BuildRequires: procps-ng
 
-
-# %%configure --enable-gtest
+# %%configure --with-gtest
 BuildRequires: gtest-devel
+
 # in case you ever wanted to use %%configure --enable-generate-docs
 #BuildRequires: elinks asciidoc plantuml
 
@@ -81,16 +82,17 @@ sed -i -e 's|@localstatedir@|@sharedstatedir@|g' src/lib/dhcpsrv/Makefile.am
 autoreconf --verbose --force --install
 
 %configure \
-    --disable-silent-rules \
     --disable-dependency-tracking \
+    --disable-rpath \
+    --disable-silent-rules \
     --disable-static \
+    --enable-debug \
     --enable-systemd \
-    --with-openssl \
     --with-dhcp-mysql \
     --with-dhcp-pgsql \
-    --disable-rpath \
-    --enable-gtest \
-    --enable-debug
+    --with-gtest \
+    --with-log4cplus \
+    --with-openssl
 
 make %{?_smp_mflags}
 
@@ -98,12 +100,11 @@ make %{?_smp_mflags}
 %check
 #make check
 
-
 %install
-make install DESTDIR=%{buildroot}
+make DESTDIR=%{buildroot} install %{?_smp_mflags}
 
 # Get rid of .la files
-rm -f %{buildroot}%{_libdir}/libkea-*.la
+find %{buildroot} -type f -name "*.la" -delete -print
 
 # Start empty lease databases
 mkdir -p %{buildroot}%{_sharedstatedir}/kea/
@@ -150,6 +151,7 @@ EOF
 %{_sbindir}/kea-lfc
 %{_sbindir}/keactrl
 %{_sbindir}/perfdhcp
+%{_bindir}/message
 %{_unitdir}/kea-dhcp4.service
 %{_unitdir}/kea-dhcp6.service
 %{_unitdir}/kea-dhcp-ddns.service
@@ -166,9 +168,8 @@ EOF
 %{_datarootdir}/kea/dhcp4.spec
 %{_datarootdir}/kea/dhcp6.spec
 %{_datarootdir}/kea/scripts/admin-utils.sh
-%{_datarootdir}/kea/scripts/mysql/dhcpdb_create.mysql
-%{_datarootdir}/kea/scripts/mysql/upgrade_1.0_to_2.0.sh
-%{_datarootdir}/kea/scripts/pgsql/dhcpdb_create.pgsql
+%{_datarootdir}/kea/scripts/mysql
+%{_datarootdir}/kea/scripts/pgsql
 %dir %{_sharedstatedir}/kea
 %config(noreplace) %{_sharedstatedir}/kea/kea-leases4.csv
 %config(noreplace) %{_sharedstatedir}/kea/kea-leases6.csv
@@ -202,6 +203,7 @@ EOF
 %{_libdir}/libkea-exceptions.so.*
 %{_libdir}/libkea-hooks.so.*
 %{_libdir}/libkea-log.so.*
+%{_libdir}/libkea-stats.so.*
 %{_libdir}/libkea-threads.so.*
 %{_libdir}/libkea-util-io.so.*
 %{_libdir}/libkea-util.so.*
@@ -220,12 +222,16 @@ EOF
 %{_libdir}/libkea-exceptions.so
 %{_libdir}/libkea-hooks.so
 %{_libdir}/libkea-log.so
+%{_libdir}/libkea-stats.so
 %{_libdir}/libkea-threads.so
 %{_libdir}/libkea-util-io.so
 %{_libdir}/libkea-util.so
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Tue Jul 28 2015 Jiri Popelka <jpopelka@redhat.com> - 0.9.2-1
+- 0.9.2
+
 * Wed Apr 01 2015 Jiri Popelka <jpopelka@redhat.com> - 0.9.1-1
 - 0.9.1
 
