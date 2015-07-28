@@ -4,13 +4,14 @@
 %global prever beta
 
 #%%global VERSION %{version}-%{patchver}
-#%%global VERSION %{version}
-%global VERSION %{version}-%{prever}
+#%%global VERSION %{version}-%{prever}
+%global VERSION %{version}
+
 
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  0.9.2
-Release:  0.2.%{prever}%{?dist}
+Release:  1%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -35,6 +36,8 @@ BuildRequires: systemd
 # src/lib/testutils/dhcp_test_lib.sh
 BuildRequires: procps-ng
 
+# %%configure --with-gtest
+BuildRequires: gtest-devel
 
 # in case you ever wanted to use %%configure --enable-generate-docs
 #BuildRequires: elinks asciidoc plantuml
@@ -79,15 +82,17 @@ sed -i -e 's|@localstatedir@|@sharedstatedir@|g' src/lib/dhcpsrv/Makefile.am
 autoreconf --verbose --force --install
 
 %configure \
-    --disable-silent-rules \
     --disable-dependency-tracking \
+    --disable-rpath \
+    --disable-silent-rules \
     --disable-static \
+    --enable-debug \
     --enable-systemd \
-    --with-openssl \
     --with-dhcp-mysql \
     --with-dhcp-pgsql \
-    --disable-rpath \
-    --enable-debug
+    --with-gtest \
+    --with-log4cplus \
+    --with-openssl
 
 make %{?_smp_mflags}
 
@@ -95,12 +100,11 @@ make %{?_smp_mflags}
 %check
 #make check
 
-
 %install
-make install DESTDIR=%{buildroot}
+make DESTDIR=%{buildroot} install %{?_smp_mflags}
 
 # Get rid of .la files
-rm -f %{buildroot}%{_libdir}/libkea-*.la
+find %{buildroot} -type f -name "*.la" -delete -print
 
 # Start empty lease databases
 mkdir -p %{buildroot}%{_sharedstatedir}/kea/
@@ -225,6 +229,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Tue Jul 28 2015 Jiri Popelka <jpopelka@redhat.com> - 0.9.2-1
+- 0.9.2
+
 * Wed Jul 22 2015 David Tardon <dtardon@redhat.com> - 0.9.2-0.2.beta
 - rebuild for Boost 1.58
 
