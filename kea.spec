@@ -11,7 +11,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  0.9.2
-Release:  2%{?dist}
+Release:  3%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -29,7 +29,7 @@ BuildRequires: mariadb-devel
 # %%configure --with-dhcp-pgsql
 BuildRequires: postgresql-devel
 BuildRequires: log4cplus-devel
-%ifarch %{ix86} x86_64 ppc ppc64 ppc64le s390x armv7hl aarch64
+%ifnarch s390
 BuildRequires: valgrind-devel
 %endif
 BuildRequires: systemd
@@ -229,6 +229,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Mon Aug 24 2015 Jiri Popelka <jpopelka@redhat.com> - 0.9.2-3
+- fix valgrind-devel availability
+
 * Wed Jul 29 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Changes/F23Boost159
 
