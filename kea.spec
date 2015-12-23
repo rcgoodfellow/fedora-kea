@@ -1,7 +1,7 @@
 #http://lists.fedoraproject.org/pipermail/devel/2011-August/155358.html
 %global _hardened_build 1
 
-%global prever beta
+%global prever beta2
 
 #%%global VERSION %{version}-%{patchver}
 #%%global VERSION %{version}
@@ -10,7 +10,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  1.0.0
-Release:  1%{?dist}
+Release:  0.2.%{prever}%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -151,7 +151,7 @@ EOF
 %{_sbindir}/kea-lfc
 %{_sbindir}/keactrl
 %{_sbindir}/perfdhcp
-%{_bindir}/message
+%{_bindir}/kea-msg-compiler
 %{_unitdir}/kea-dhcp4.service
 %{_unitdir}/kea-dhcp6.service
 %{_unitdir}/kea-dhcp-ddns.service
@@ -229,7 +229,10 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
-* Wed Dec 09 2015 Jiri Popelka <jpopelka@redhat.com> - 1.0.0-1
+* Wed Dec 23 2015 Jiri Popelka <jpopelka@redhat.com> - 1.0.0-0.2.beta2
+- 1.0.0-beta2
+
+* Wed Dec 09 2015 Jiri Popelka <jpopelka@redhat.com> - 1.0.0-0.1.beta
 - 1.0.0-beta
 
 * Mon Aug 24 2015 Jiri Popelka <jpopelka@redhat.com> - 0.9.2-3
