@@ -11,13 +11,14 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  0.9.2
-Release:  3%{?dist}
+Release:  4%{?dist}
 License:  ISC and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
 
 # http://kea.isc.org/ticket/3529
 Patch0:   kea-systemd.patch
+Patch1:   kea-CVE-2015-8373.patch
 
 # autoreconf
 BuildRequires: autoconf automake libtool
@@ -73,6 +74,7 @@ Header files and API documentation.
 %setup -q -n kea-%{VERSION}
 
 %patch0 -p1 -b .systemd
+%patch1 -p1 -b .CVE-2015-8373
 
 # install leases db in /var/lib/kea/ not /var/kea/
 # http://kea.isc.org/ticket/3523
@@ -229,6 +231,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Wed Dec 23 2015 Jiri Popelka <jpopelka@redhat.com> - 0.9.2-4
+- CVE-2015-8373
+
 * Mon Aug 24 2015 Jiri Popelka <jpopelka@redhat.com> - 0.9.2-3
 - fix valgrind-devel availability
 
