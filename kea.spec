@@ -3,21 +3,20 @@
 
 %global prever beta2
 
-#%%global VERSION %{version}-%{patchver}
-#%%global VERSION %{version}
-%global VERSION %{version}-%{prever}
+#%%global VERSION %%{version}-%%{patchver}
+#%%global VERSION %%{version}-%%{prever}
+%global VERSION %{version}
 
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  1.0.0
-Release:  0.3.%{prever}%{?dist}
-License:  ISC and Boost
+Release:  1%{?dist}
+License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
 
 # http://kea.isc.org/ticket/3529
 Patch0:   kea-systemd.patch
-Patch1:   kea-unsigned-long-length.patch
 
 # autoreconf
 BuildRequires: autoconf automake libtool
@@ -73,7 +72,6 @@ Header files and API documentation.
 %setup -q -n kea-%{VERSION}
 
 %patch0 -p1 -b .systemd
-%patch1 -p1 -b .unsigned-long-length
 
 # install leases db in /var/lib/kea/ not /var/kea/
 # http://kea.isc.org/ticket/3523
@@ -231,6 +229,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Tue Dec 29 2015 Jiri Popelka <jpopelka@redhat.com> - 1.0.0-1
+- 1.0.0
+
 * Wed Dec 23 2015 Jiri Popelka <jpopelka@redhat.com> - 1.0.0-0.3.beta2
 - fix compile error
 
