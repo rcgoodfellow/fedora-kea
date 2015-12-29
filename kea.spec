@@ -3,22 +3,20 @@
 
 %global prever beta
 
-#%%global VERSION %{version}-%{patchver}
-#%%global VERSION %{version}-%{prever}
+#%%global VERSION %%{version}-%%{patchver}
+#%%global VERSION %%{version}-%%{prever}
 %global VERSION %{version}
-
 
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
-Version:  0.9.2
-Release:  4%{?dist}
-License:  ISC and Boost
+Version:  1.0.0
+Release:  1%{?dist}
+License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
 
 # http://kea.isc.org/ticket/3529
 Patch0:   kea-systemd.patch
-Patch1:   kea-CVE-2015-8373.patch
 
 # autoreconf
 BuildRequires: autoconf automake libtool
@@ -74,7 +72,6 @@ Header files and API documentation.
 %setup -q -n kea-%{VERSION}
 
 %patch0 -p1 -b .systemd
-%patch1 -p1 -b .CVE-2015-8373
 
 # install leases db in /var/lib/kea/ not /var/kea/
 # http://kea.isc.org/ticket/3523
@@ -92,6 +89,7 @@ autoreconf --verbose --force --install
     --enable-systemd \
     --with-dhcp-mysql \
     --with-dhcp-pgsql \
+    --with-gnu-ld \
     --with-gtest \
     --with-log4cplus \
     --with-openssl
@@ -113,7 +111,7 @@ mkdir -p %{buildroot}%{_sharedstatedir}/kea/
 touch %{buildroot}%{_sharedstatedir}/kea/kea-leases4.csv
 touch %{buildroot}%{_sharedstatedir}/kea/kea-leases6.csv
 
-install -p -m 644 ext/LICENSE_1_0.txt %{buildroot}%{_defaultdocdir}/kea/
+rm -f %{buildroot}%{_defaultdocdir}/kea/COPYING
 
 mkdir -p %{buildroot}/run
 install -d -m 0755 %{buildroot}/run/kea/
@@ -153,7 +151,7 @@ EOF
 %{_sbindir}/kea-lfc
 %{_sbindir}/keactrl
 %{_sbindir}/perfdhcp
-%{_bindir}/message
+%{_bindir}/kea-msg-compiler
 %{_unitdir}/kea-dhcp4.service
 %{_unitdir}/kea-dhcp6.service
 %{_unitdir}/kea-dhcp-ddns.service
@@ -161,17 +159,12 @@ EOF
 %config(noreplace) %{_sysconfdir}/kea/kea.conf
 %config(noreplace) %{_sysconfdir}/kea/keactrl.conf
 %dir %{_datarootdir}/kea/
-%dir %{_datarootdir}/kea/scripts/
-%dir %{_datarootdir}/kea/scripts/mysql/
-%dir %{_datarootdir}/kea/scripts/pgsql/
+%{_datarootdir}/kea/scripts
 %dir /run/kea/
 %{_tmpfilesdir}/kea.conf
 %{_datarootdir}/kea/dhcp-ddns.spec
 %{_datarootdir}/kea/dhcp4.spec
 %{_datarootdir}/kea/dhcp6.spec
-%{_datarootdir}/kea/scripts/admin-utils.sh
-%{_datarootdir}/kea/scripts/mysql
-%{_datarootdir}/kea/scripts/pgsql
 %dir %{_sharedstatedir}/kea
 %config(noreplace) %{_sharedstatedir}/kea/kea-leases4.csv
 %config(noreplace) %{_sharedstatedir}/kea/kea-leases6.csv
@@ -180,6 +173,7 @@ EOF
 %{_defaultdocdir}/kea/README
 %{_defaultdocdir}/kea/examples
 %{_defaultdocdir}/kea/kea-guide.*
+%{_defaultdocdir}/kea/kea-logo-100x70.png
 %{_defaultdocdir}/kea/kea-messages.html
 %{_mandir}/man8/kea-admin.8.gz
 %{_mandir}/man8/kea-dhcp-ddns.8.gz
@@ -190,9 +184,11 @@ EOF
 %{_mandir}/man8/perfdhcp.8.gz
 
 %files libs
-%dir %{_defaultdocdir}/kea/
-%{_defaultdocdir}/kea/COPYING
-%{_defaultdocdir}/kea/LICENSE_1_0.txt
+#%%dir %%{_defaultdocdir}/kea/
+#%%{_defaultdocdir}/kea/COPYING
+#%%{_defaultdocdir}/kea/LICENSE_1_0.txt
+%license COPYING
+%license ext/coroutine/LICENSE_1_0.txt
 %{_libdir}/libkea-asiodns.so.*
 %{_libdir}/libkea-asiolink.so.*
 %{_libdir}/libkea-cc.so.*
@@ -202,6 +198,7 @@ EOF
 %{_libdir}/libkea-dhcp_ddns.so.*
 %{_libdir}/libkea-dhcpsrv.so.*
 %{_libdir}/libkea-dns++.so.*
+%{_libdir}/libkea-eval.so.*
 %{_libdir}/libkea-exceptions.so.*
 %{_libdir}/libkea-hooks.so.*
 %{_libdir}/libkea-log.so.*
@@ -221,6 +218,7 @@ EOF
 %{_libdir}/libkea-dhcp_ddns.so
 %{_libdir}/libkea-dhcpsrv.so
 %{_libdir}/libkea-dns++.so
+%{_libdir}/libkea-eval.so
 %{_libdir}/libkea-exceptions.so
 %{_libdir}/libkea-hooks.so
 %{_libdir}/libkea-log.so
@@ -231,6 +229,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Tue Dec 29 2015 Jiri Popelka <jpopelka@redhat.com> - 1.0.0-1
+- 1.0.0
+
 * Wed Dec 23 2015 Jiri Popelka <jpopelka@redhat.com> - 0.9.2-4
 - CVE-2015-8373
 
