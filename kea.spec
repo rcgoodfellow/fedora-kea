@@ -10,7 +10,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  1.0.0
-Release:  1%{?dist}
+Release:  2%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -37,6 +37,9 @@ BuildRequires: procps-ng
 
 # %%configure --with-gtest
 BuildRequires: gtest-devel
+
+# in case you ever wanted to use %%configure --enable-generate-parser
+#BuildRequires: flex bison
 
 # in case you ever wanted to use %%configure --enable-generate-docs
 #BuildRequires: elinks asciidoc plantuml
@@ -76,6 +79,9 @@ Header files and API documentation.
 # install leases db in /var/lib/kea/ not /var/kea/
 # http://kea.isc.org/ticket/3523
 sed -i -e 's|@localstatedir@|@sharedstatedir@|g' src/lib/dhcpsrv/Makefile.am
+
+# to be able to build on ppc64(le)
+sed -i -e 's|ECHO|YYECHO|g' src/lib/eval/lexer.cc
 
 %build
 autoreconf --verbose --force --install
@@ -229,6 +235,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Wed Jan 06 2016 Jiri Popelka <jpopelka@redhat.com> - 1.0.0-2
+- make it build on ppc64(le)
+
 * Tue Dec 29 2015 Jiri Popelka <jpopelka@redhat.com> - 1.0.0-1
 - 1.0.0
 
