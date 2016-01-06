@@ -81,6 +81,8 @@ Header files and API documentation.
 sed -i -e 's|@localstatedir@|@sharedstatedir@|g' src/lib/dhcpsrv/Makefile.am
 
 # to be able to build on ppc64(le)
+# https://sourceforge.net/p/flex/bugs/197
+# https://lists.isc.org/pipermail/kea-dev/2016-January/000599.html
 sed -i -e 's|ECHO|YYECHO|g' src/lib/eval/lexer.cc
 
 %build
