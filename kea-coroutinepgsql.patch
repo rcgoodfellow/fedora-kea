@@ -1,0 +1,35 @@
+diff -up kea-1.0.0/ext/coroutine/coroutine.h.backup kea-1.0.0/ext/coroutine/coroutine.h
+--- kea-1.0.0/ext/coroutine/coroutine.h.backup	2016-03-10 14:05:39.158550805 +0100
++++ kea-1.0.0/ext/coroutine/coroutine.h	2016-03-10 14:07:03.227878558 +0100
+@@ -108,7 +108,6 @@ private:
+   for (_coro_value = __LINE__;;) \
+     if (_coro_value == 0) \
+     { \
+-      case __LINE__: ; \
+       break; \
+     } \
+     else \
+
+
+
+
+
+
+
+
+
+
+
+
+diff -up kea-1.0.0/src/lib/dhcpsrv/pgsql_lease_mgr.cc.backup kea-1.0.0/src/lib/dhcpsrv/pgsql_lease_mgr.cc
+--- kea-1.0.0/src/lib/dhcpsrv/pgsql_lease_mgr.cc.backup	2016-03-10 14:06:46.263014215 +0100
++++ kea-1.0.0/src/lib/dhcpsrv/pgsql_lease_mgr.cc	2016-03-10 14:30:54.466785453 +0100
+@@ -1690,7 +1690,7 @@ PgSqlLeaseMgr::getVersion() const {
+ 
+     PQclear(r);
+ 
+-    return make_pair<uint32_t, uint32_t>(version, minor);
++    return make_pair<uint32_t &&, uint32_t &&>(std::move(version), std::move(minor));
+ }
+ 
+ void

@@ -10,13 +10,14 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  1.0.0
-Release:  3%{?dist}
+Release:  4%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
 
 # http://kea.isc.org/ticket/3529
 Patch0:   kea-systemd.patch
+Patch1:   kea-coroutinepgsql.patch
 
 # autoreconf
 BuildRequires: autoconf automake libtool
@@ -72,6 +73,7 @@ Header files and API documentation.
 %setup -q -n kea-%{VERSION}
 
 %patch0 -p1 -b .systemd
+%patch1 -p1 -b .coroutinepgsql
 
 # install leases db in /var/lib/kea/ not /var/kea/
 # http://kea.isc.org/ticket/3523
@@ -79,6 +81,7 @@ sed -i -e 's|@localstatedir@|@sharedstatedir@|g' src/lib/dhcpsrv/Makefile.am
 
 %build
 autoreconf --verbose --force --install
+export CXXFLAGS="%{optflags} -std=gnu++11 -Wno-deprecated-declarations"
 
 %configure \
     --disable-dependency-tracking \
@@ -90,9 +93,9 @@ autoreconf --verbose --force --install
     --with-dhcp-mysql \
     --with-dhcp-pgsql \
     --with-gnu-ld \
-    --with-gtest \
     --with-log4cplus \
-    --with-openssl
+    --with-openssl \
+#    --with-gtest
 
 make %{?_smp_mflags}
 
@@ -229,6 +232,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Fri Mar 11 2016 Zdenek Dohnal zdohnal@redhat.com - 1.0.0-4
+- Fixing bugs created from new C++ standard
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
