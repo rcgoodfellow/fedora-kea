@@ -10,7 +10,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  1.0.0
-Release:  4%{?dist}
+Release:  6%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -232,6 +232,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Wed Mar 16 2016 Zdenek Dohnal zdohnal@redhat.com - 1.0.0-6
+- Editing pgsql_lease_mgr.cc according to upstream
+
 * Fri Mar 11 2016 Zdenek Dohnal zdohnal@redhat.com - 1.0.0-4
 - Fixing bugs created from new C++ standard
 
