@@ -10,13 +10,14 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  1.0.0
-Release:  2%{?dist}
+Release:  9%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
 
 # http://kea.isc.org/ticket/3529
 Patch0:   kea-systemd.patch
+Patch1:   kea-coroutinepgsql.patch
 
 # autoreconf
 BuildRequires: autoconf automake libtool
@@ -67,6 +68,8 @@ This package contains shared libraries used by Kea DHCP server.
 %package devel
 Summary: Development headers and libraries for Kea DHCP server
 Requires: kea-libs%{?_isa} = %{version}-%{release}
+# to build hooks (#1335900)
+Requires: boost-devel
 
 %description devel
 Header files and API documentation.
@@ -75,6 +78,7 @@ Header files and API documentation.
 %setup -q -n kea-%{VERSION}
 
 %patch0 -p1 -b .systemd
+%patch1 -p1 -b .coroutinepgsql
 
 # install leases db in /var/lib/kea/ not /var/kea/
 # http://kea.isc.org/ticket/3523
@@ -87,6 +91,7 @@ sed -i -e 's|ECHO|YYECHO|g' src/lib/eval/lexer.cc
 
 %build
 autoreconf --verbose --force --install
+export CXXFLAGS="%{optflags} -std=gnu++11 -Wno-deprecated-declarations"
 
 %configure \
     --disable-dependency-tracking \
@@ -98,9 +103,9 @@ autoreconf --verbose --force --install
     --with-dhcp-mysql \
     --with-dhcp-pgsql \
     --with-gnu-ld \
-    --with-gtest \
     --with-log4cplus \
-    --with-openssl
+    --with-openssl \
+#    --with-gtest
 
 make %{?_smp_mflags}
 
@@ -237,8 +242,26 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
-* Wed Jan 06 2016 Jiri Popelka <jpopelka@redhat.com> - 1.0.0-2
-- make it build on ppc64(le)
+* Fri May 13 2016 Jiri Popelka <jpopelka@redhat.com> - 1.0.0-9
+- devel subpackage Requires: boost-devel
+
+* Wed Mar 23 2016 Zdenek Dohnal <zdohnal@redhat.com> - 1.0.0-8
+- Rebuild for log4cplus-1.2.0-2
+
+* Wed Mar 23 2016 Zdenek Dohnal <zdohnal@redhat.com> - 1.0.0-7
+- Rebuilding kea for log4cplus-1.2.0
+
+* Wed Mar 16 2016 Zdenek Dohnal <zdohnal@redhat.com> - 1.0.0-6
+- Editing pgsql_lease_mgr.cc according to upstream
+
+* Fri Mar 11 2016 Zdenek Dohnal <zdohnal@redhat.com> - 1.0.0-4
+- Fixing bugs created from new C++ standard
+
+* Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
+* Fri Jan 15 2016 Jonathan Wakely <jwakely@redhat.com> - 1.0.0-2
+- Rebuilt for Boost 1.60
 
 * Tue Dec 29 2015 Jiri Popelka <jpopelka@redhat.com> - 1.0.0-1
 - 1.0.0
