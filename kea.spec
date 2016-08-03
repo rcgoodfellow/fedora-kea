@@ -10,7 +10,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  1.0.0
-Release:  9%{?dist}
+Release:  10%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -124,7 +124,7 @@ mkdir -p %{buildroot}%{_sharedstatedir}/kea/
 touch %{buildroot}%{_sharedstatedir}/kea/kea-leases4.csv
 touch %{buildroot}%{_sharedstatedir}/kea/kea-leases6.csv
 
-rm -f %{buildroot}%{_defaultdocdir}/kea/COPYING
+rm -f %{buildroot}%{_pkgdocdir}/COPYING
 
 mkdir -p %{buildroot}/run
 install -d -m 0755 %{buildroot}/run/kea/
@@ -181,13 +181,13 @@ EOF
 %dir %{_sharedstatedir}/kea
 %config(noreplace) %{_sharedstatedir}/kea/kea-leases4.csv
 %config(noreplace) %{_sharedstatedir}/kea/kea-leases6.csv
-%{_defaultdocdir}/kea/AUTHORS
-%{_defaultdocdir}/kea/ChangeLog
-%{_defaultdocdir}/kea/README
-%{_defaultdocdir}/kea/examples
-%{_defaultdocdir}/kea/kea-guide.*
-%{_defaultdocdir}/kea/kea-logo-100x70.png
-%{_defaultdocdir}/kea/kea-messages.html
+%{_pkgdocdir}/AUTHORS
+%{_pkgdocdir}/ChangeLog
+%{_pkgdocdir}/README
+%{_pkgdocdir}/examples
+%{_pkgdocdir}/kea-guide.*
+%{_pkgdocdir}/kea-logo-100x70.png
+%{_pkgdocdir}/kea-messages.html
 %{_mandir}/man8/kea-admin.8.gz
 %{_mandir}/man8/kea-dhcp-ddns.8.gz
 %{_mandir}/man8/kea-dhcp4.8.gz
@@ -197,9 +197,9 @@ EOF
 %{_mandir}/man8/perfdhcp.8.gz
 
 %files libs
-#%%dir %%{_defaultdocdir}/kea/
-#%%{_defaultdocdir}/kea/COPYING
-#%%{_defaultdocdir}/kea/LICENSE_1_0.txt
+#%%dir %%{_pkgdocdir}/
+#%%{_pkgdocdir}/COPYING
+#%%{_pkgdocdir}/LICENSE_1_0.txt
 %license COPYING
 %license ext/coroutine/LICENSE_1_0.txt
 %{_libdir}/libkea-asiodns.so.*
@@ -242,6 +242,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Wed Aug 03 2016 Jiri Popelka <jpopelka@redhat.com> - 1.0.0-10
+- %%{_defaultdocdir}/kea/ -> %%{_pkgdocdir}
+
 * Fri May 13 2016 Jiri Popelka <jpopelka@redhat.com> - 1.0.0-9
 - devel subpackage Requires: boost-devel
 
