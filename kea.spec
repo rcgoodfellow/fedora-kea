@@ -10,7 +10,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  1.0.0
-Release:  10%{?dist}
+Release:  11%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -29,7 +29,7 @@ BuildRequires: mariadb-devel
 # %%configure --with-dhcp-pgsql
 BuildRequires: postgresql-devel
 BuildRequires: log4cplus-devel
-%ifnarch s390
+%ifnarch s390 %{mips}
 BuildRequires: valgrind-devel
 %endif
 BuildRequires: systemd
@@ -242,6 +242,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Fri Aug 11 2016 Michal Toman <mtoman@fedoraproject.org> - 1.0.0-11
+- No valgrind on MIPS
+
 * Wed Aug 03 2016 Jiri Popelka <jpopelka@redhat.com> - 1.0.0-10
 - %%{_defaultdocdir}/kea/ -> %%{_pkgdocdir}
 
