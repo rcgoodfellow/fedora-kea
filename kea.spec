@@ -242,7 +242,7 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
-* Fri Aug 11 2016 Michal Toman <mtoman@fedoraproject.org> - 1.0.0-11
+* Fri Aug 12 2016 Michal Toman <mtoman@fedoraproject.org> - 1.0.0-11
 - No valgrind on MIPS
 
 * Wed Aug 03 2016 Jiri Popelka <jpopelka@redhat.com> - 1.0.0-10
