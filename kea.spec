@@ -1,16 +1,16 @@
 #http://lists.fedoraproject.org/pipermail/devel/2011-August/155358.html
 %global _hardened_build 1
 
-%global prever beta2
+%global prever beta
 
 #%%global VERSION %%{version}-%%{patchver}
-#%%global VERSION %%{version}-%%{prever}
-%global VERSION %{version}
+#%%global VERSION %%{version}
+%global VERSION %{version}-%{prever}
 
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
-Version:  1.0.0
-Release:  11%{?dist}
+Version:  1.1.0
+Release:  0.1%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -242,6 +242,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Thu Sep 01 2016 Jiri Popelka <jpopelka@redhat.com> - 1.1.0-0.1
+- 1.1.0-beta
+
 * Fri Aug 12 2016 Michal Toman <mtoman@fedoraproject.org> - 1.0.0-11
 - No valgrind on MIPS
 

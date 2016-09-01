@@ -1,6 +1,6 @@
-diff -up ./ext/coroutine/coroutine.h.coroutinepgsql ./ext/coroutine/coroutine.h
---- ./ext/coroutine/coroutine.h.coroutinepgsql	2015-12-28 13:18:05.000000000 +0100
-+++ ./ext/coroutine/coroutine.h	2016-03-15 14:58:26.344825900 +0100
+diff -up kea-1.1.0-beta/ext/coroutine/coroutine.h.coroutinepgsql kea-1.1.0-beta/ext/coroutine/coroutine.h
+--- kea-1.1.0-beta/ext/coroutine/coroutine.h.coroutinepgsql	2016-08-28 20:36:34.000000000 +0200
++++ kea-1.1.0-beta/ext/coroutine/coroutine.h	2016-09-01 09:59:16.767902664 +0200
 @@ -108,7 +108,7 @@ private:
    for (_coro_value = __LINE__;;) \
      if (_coro_value == 0) \
@@ -10,12 +10,24 @@ diff -up ./ext/coroutine/coroutine.h.coroutinepgsql ./ext/coroutine/coroutine.h
        break; \
      } \
      else \
-diff -up ./src/lib/dhcpsrv/pgsql_lease_mgr.cc.coroutinepgsql ./src/lib/dhcpsrv/pgsql_lease_mgr.cc
---- ./src/lib/dhcpsrv/pgsql_lease_mgr.cc.coroutinepgsql	2015-12-28 13:18:45.000000000 +0100
-+++ ./src/lib/dhcpsrv/pgsql_lease_mgr.cc	2016-03-15 13:59:06.837391677 +0100
-@@ -1690,7 +1690,7 @@ PgSqlLeaseMgr::getVersion() const {
+diff -up kea-1.1.0-beta/src/lib/dhcpsrv/pgsql_host_data_source.cc.coroutinepgsql kea-1.1.0-beta/src/lib/dhcpsrv/pgsql_host_data_source.cc
+--- kea-1.1.0-beta/src/lib/dhcpsrv/pgsql_host_data_source.cc.coroutinepgsql	2016-08-28 20:36:34.000000000 +0200
++++ kea-1.1.0-beta/src/lib/dhcpsrv/pgsql_host_data_source.cc	2016-09-02 19:48:37.210354247 +0200
+@@ -1698,7 +1698,7 @@ std::pair<uint32_t, uint32_t> PgSqlHostD
+     uint32_t minor;
+     PgSqlExchange::getColumnValue(r, 0, 0, minor);
  
-     PQclear(r);
+-    return (std::make_pair<uint32_t, uint32_t>(version, minor));
++    return (make_pair(version, minor));
+ }
+ 
+ void
+diff -up kea-1.1.0-beta/src/lib/dhcpsrv/pgsql_lease_mgr.cc.coroutinepgsql kea-1.1.0-beta/src/lib/dhcpsrv/pgsql_lease_mgr.cc
+--- kea-1.1.0-beta/src/lib/dhcpsrv/pgsql_lease_mgr.cc.coroutinepgsql	2016-08-28 20:36:34.000000000 +0200
++++ kea-1.1.0-beta/src/lib/dhcpsrv/pgsql_lease_mgr.cc	2016-09-01 09:59:16.767902664 +0200
+@@ -1391,7 +1391,7 @@ PgSqlLeaseMgr::getVersion() const {
+     tmp.str(PQgetvalue(r, 0, 1));
+     tmp >> minor;
  
 -    return make_pair<uint32_t, uint32_t>(version, minor);
 +    return (make_pair(version, minor));
