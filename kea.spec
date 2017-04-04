@@ -10,13 +10,15 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  1.1.0
-Release:  2%{?dist}
+Release:  3%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
 
 # http://kea.isc.org/ticket/3529
 Patch0:   kea-systemd.patch
+## https://github.com/isc-projects/kea/pull/34
+Patch1: kea-openssl-1.1.patch
 
 # autoreconf
 BuildRequires: autoconf automake libtool
@@ -77,6 +79,7 @@ Header files and API documentation.
 %setup -q -n kea-%{VERSION}
 
 %patch0 -p1 -b .systemd
+%patch1 -p1 -b .openssl
 
 # install leases db in /var/lib/kea/ not /var/kea/
 # http://kea.isc.org/ticket/3523
@@ -240,6 +243,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Tue Apr 04 2017 Pavel Zhukov <landgraf@fedoraproject.org> - 1.1.0-3
+- Add patch for OpenSSL 1.1. Fix FTBFS (#1423812)
+
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
