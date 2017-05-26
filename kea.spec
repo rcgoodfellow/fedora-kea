@@ -9,16 +9,14 @@
 
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
-Version:  1.1.0
-Release:  3%{?dist}
+Version:  1.2.0
+Release:  2%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
 
 # http://kea.isc.org/ticket/3529
 Patch0:   kea-systemd.patch
-## https://github.com/isc-projects/kea/pull/34
-Patch1: kea-openssl-1.1.patch
 
 # autoreconf
 BuildRequires: autoconf automake libtool
@@ -79,7 +77,6 @@ Header files and API documentation.
 %setup -q -n kea-%{VERSION}
 
 %patch0 -p1 -b .systemd
-%patch1 -p1 -b .openssl
 
 # install leases db in /var/lib/kea/ not /var/kea/
 # http://kea.isc.org/ticket/3523
@@ -166,12 +163,14 @@ EOF
 %{_sbindir}/keactrl
 %{_sbindir}/perfdhcp
 %{_bindir}/kea-msg-compiler
+%{_sbindir}/kea-ctrl-agent
 %{_unitdir}/kea-dhcp4.service
 %{_unitdir}/kea-dhcp6.service
 %{_unitdir}/kea-dhcp-ddns.service
 %dir %{_sysconfdir}/kea/
 %config(noreplace) %{_sysconfdir}/kea/kea.conf
 %config(noreplace) %{_sysconfdir}/kea/keactrl.conf
+%config(noreplace) %{_sysconfdir}/kea/kea-ca.conf
 %dir %{_datarootdir}/kea/
 %{_datarootdir}/kea/scripts
 %dir /run/kea/
@@ -196,6 +195,8 @@ EOF
 %{_mandir}/man8/kea-lfc.8.gz
 %{_mandir}/man8/keactrl.8.gz
 %{_mandir}/man8/perfdhcp.8.gz
+%{_mandir}/man8/kea-ctrl-agent.8.gz
+%{_mandir}/man8/kea-shell.8.gz
 
 %files libs
 #%%dir %%{_pkgdocdir}/
@@ -220,6 +221,12 @@ EOF
 %{_libdir}/libkea-threads.so.*
 %{_libdir}/libkea-util-io.so.*
 %{_libdir}/libkea-util.so.*
+%{_libdir}/libkea-http.so
+%{_libdir}/libkea-http.so.0
+%{_libdir}/libkea-http.so.0.0.0
+%{_libdir}/libkea-process.so
+%{_libdir}/libkea-process.so.0
+%{_libdir}/libkea-process.so.0.0.0
 
 %files devel
 %{_includedir}/kea
@@ -243,6 +250,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Fri May 26 2017 Pavel Zhukov <landgraf@fedoraproject.org> - 1.2.0-2
+- New release 1.2.0 (#1440348)
+
 * Tue Apr 04 2017 Pavel Zhukov <landgraf@fedoraproject.org> - 1.1.0-3
 - Add patch for OpenSSL 1.1. Fix FTBFS (#1423812)
 
