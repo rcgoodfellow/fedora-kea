@@ -10,7 +10,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  1.2.0
-Release:  2%{?dist}
+Release:  3%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -250,6 +250,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Mon Jul 03 2017 Jonathan Wakely <jwakely@redhat.com> - 1.2.0-3
+- Rebuilt for Boost 1.64
+
 * Fri May 26 2017 Pavel Zhukov <landgraf@fedoraproject.org> - 1.2.0-2
 - New release 1.2.0 (#1440348)
 
