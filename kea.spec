@@ -10,7 +10,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  1.2.0
-Release:  5%{?dist}
+Release:  6%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -24,7 +24,7 @@ BuildRequires: boost-devel
 # %%configure --with-openssl
 BuildRequires: openssl-devel
 # %%configure --with-dhcp-mysql
-BuildRequires: mariadb-devel
+BuildRequires: mariadb-connector-c-devel
 # %%configure --with-dhcp-pgsql
 BuildRequires: postgresql-devel
 BuildRequires: log4cplus-devel
@@ -250,6 +250,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Thu Oct 12 2017 Pavel Zhukov <pzhukov@redhat.com> - 1.2.0-6
+- Use mariadb-connector-c-devel instead of mysql-devel (#1493628)
+
 * Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
