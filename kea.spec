@@ -10,7 +10,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  1.2.0
-Release:  6%{?dist}
+Release:  7%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
@@ -250,6 +250,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Sun Oct 22 2017 Pavel Zhukov <pzhukov@redhat.com> - 1.2.0-7
+- Rebuild with new openssl
+
 * Thu Oct 12 2017 Pavel Zhukov <pzhukov@redhat.com> - 1.2.0-6
 - Use mariadb-connector-c-devel instead of mysql-devel (#1493628)
 
