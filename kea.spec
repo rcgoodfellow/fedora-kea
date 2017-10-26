@@ -3,20 +3,21 @@
 
 %global prever beta
 
-#%%global VERSION %%{version}-%%{patchver}
-#%%global VERSION %%{version}-%%{prever}
-%global VERSION %%{version}
 
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
-Version:  1.2.0
-Release:  7%{?dist}
+#%%global VERSION %%{LVERSION}-%%{patchver}
+%global LVERSION %{version}-%{prever}
+#%%global VERSION %%{LVERSION}
+Version:  1.3.0
+Release:  1%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
-Source0:  http://ftp.isc.org/isc/kea/%{VERSION}/kea-%{VERSION}.tar.gz
+Source0:  http://ftp.isc.org/isc/kea/%{LVERSION}/kea-%{LVERSION}.tar.gz
 
 # http://kea.isc.org/ticket/3529
 Patch0:   kea-systemd.patch
+Patch1:   kea-1.3.0-hooksdir.patch
 
 # autoreconf
 BuildRequires: autoconf automake libtool
@@ -64,6 +65,17 @@ Summary: Shared libraries used by Kea DHCP server
 %description libs
 This package contains shared libraries used by Kea DHCP server.
 
+%package hooks
+Summary: Hooks libraries for kea
+Requires: kea-libs%{?_isa} = %{version}-%{release}
+
+%description hooks
+Hooking mechanism allow Kea to load one
+or more dynamically-linked libraries (known as "hooks libraries")
+and, at various points in its processing ("hook points"), call
+functions in them.  Those functions perform whatever custom
+processing is required.
+
 %package devel
 Summary: Development headers and libraries for Kea DHCP server
 Requires: kea-libs%{?_isa} = %{version}-%{release}
@@ -74,9 +86,9 @@ Requires: boost-devel
 Header files and API documentation.
 
 %prep
-%setup -q -n kea-%{VERSION}
-
+%setup -q -n kea-%{LVERSION}
 %patch0 -p1 -b .systemd
+%patch1 -p1 -b .hooksdir
 
 # install leases db in /var/lib/kea/ not /var/kea/
 # http://kea.isc.org/ticket/3523
@@ -170,7 +182,6 @@ EOF
 %dir %{_sysconfdir}/kea/
 %config(noreplace) %{_sysconfdir}/kea/kea.conf
 %config(noreplace) %{_sysconfdir}/kea/keactrl.conf
-%config(noreplace) %{_sysconfdir}/kea/kea-ca.conf
 %dir %{_datarootdir}/kea/
 %{_datarootdir}/kea/scripts
 %dir /run/kea/
@@ -197,6 +208,10 @@ EOF
 %{_mandir}/man8/perfdhcp.8.gz
 %{_mandir}/man8/kea-ctrl-agent.8.gz
 %{_mandir}/man8/kea-shell.8.gz
+
+%files hooks
+%dir %{_libdir}/%{name}
+%{_libdir}/%{name}/hooks
 
 %files libs
 #%%dir %%{_pkgdocdir}/
@@ -250,6 +265,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Mon Oct 23 2017 Pavel Zhukov <pzhukov@redhat.com> - 1.2.0-8
+- Require openssl102
+
 * Sun Oct 22 2017 Pavel Zhukov <pzhukov@redhat.com> - 1.2.0-7
 - Rebuild with new openssl
 
