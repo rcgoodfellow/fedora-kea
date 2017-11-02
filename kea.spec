@@ -10,7 +10,7 @@ Name:     kea
 %global LVERSION %{version}-%{prever}
 #%%global VERSION %%{LVERSION}
 Version:  1.3.0
-Release:  1%{?dist}
+Release:  3%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{LVERSION}/kea-%{LVERSION}.tar.gz
@@ -18,12 +18,13 @@ Source0:  http://ftp.isc.org/isc/kea/%{LVERSION}/kea-%{LVERSION}.tar.gz
 # http://kea.isc.org/ticket/3529
 Patch0:   kea-systemd.patch
 Patch1:   kea-1.3.0-hooksdir.patch
+Patch2:   kea-openssl.patch
 
 # autoreconf
 BuildRequires: autoconf automake libtool
 BuildRequires: boost-devel
 # %%configure --with-openssl
-BuildRequires: openssl-devel
+BuildRequires: compat-openssl10-devel
 # %%configure --with-dhcp-mysql
 BuildRequires: mariadb-connector-c-devel
 # %%configure --with-dhcp-pgsql
@@ -81,6 +82,8 @@ Summary: Development headers and libraries for Kea DHCP server
 Requires: kea-libs%{?_isa} = %{version}-%{release}
 # to build hooks (#1335900)
 Requires: boost-devel
+Requires: compat-openssl10-devel 
+Requires: pkgconfig
 
 %description devel
 Header files and API documentation.
@@ -89,6 +92,7 @@ Header files and API documentation.
 %setup -q -n kea-%{LVERSION}
 %patch0 -p1 -b .systemd
 %patch1 -p1 -b .hooksdir
+%patch2 -p1 -b .openssl
 
 # install leases db in /var/lib/kea/ not /var/kea/
 # http://kea.isc.org/ticket/3523
@@ -265,6 +269,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Thu Nov  2 2017 Pavel Zhukov <pzhukov@redhat.com> - 1.3.0-3
+- Add openssl-devel requires
+
 * Mon Oct 23 2017 Pavel Zhukov <pzhukov@redhat.com> - 1.2.0-8
 - Require openssl102
 
