@@ -82,7 +82,7 @@ Summary: Development headers and libraries for Kea DHCP server
 Requires: kea-libs%{?_isa} = %{version}-%{release}
 # to build hooks (#1335900)
 Requires: boost-devel
-Requires: compat-openssl10-devel 
+Requires: compat-openssl10-devel
 Requires: pkgconfig
 
 %description devel
@@ -271,6 +271,7 @@ EOF
 %changelog
 * Thu Nov  2 2017 Pavel Zhukov <pzhukov@redhat.com> - 1.3.0-3
 - Add openssl-devel requires
+- Do not force pkgconfig(openssl) version
 
 * Mon Oct 23 2017 Pavel Zhukov <pzhukov@redhat.com> - 1.2.0-8
 - Require openssl102
