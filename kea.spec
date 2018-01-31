@@ -10,7 +10,7 @@ Name:     kea
 %global LVERSION %{version}-%{prever}
 #%%global VERSION %%{LVERSION}
 Version:  1.3.0
-Release:  3%{?dist}
+Release:  5%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{LVERSION}/kea-%{LVERSION}.tar.gz
@@ -19,6 +19,7 @@ Source0:  http://ftp.isc.org/isc/kea/%{LVERSION}/kea-%{LVERSION}.tar.gz
 Patch0:   kea-systemd.patch
 Patch1:   kea-1.3.0-hooksdir.patch
 Patch2:   kea-openssl.patch
+Patch3:   kea-boost_1.66.patch
 
 # autoreconf
 BuildRequires: autoconf automake libtool
@@ -93,6 +94,7 @@ Header files and API documentation.
 %patch0 -p1 -b .systemd
 %patch1 -p1 -b .hooksdir
 %patch2 -p1 -b .openssl
+%patch3 -p1 -b .boost
 
 # install leases db in /var/lib/kea/ not /var/kea/
 # http://kea.isc.org/ticket/3523
@@ -269,6 +271,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Wed Jan 31 2018 Pavel Zhukov <landgraf@fedoraproject.org> - 1.3.0-4
+- Fix build with boost 1.66 (#1540331)
+
 * Thu Nov  2 2017 Pavel Zhukov <pzhukov@redhat.com> - 1.3.0-3
 - Add openssl-devel requires
 - Do not force pkgconfig(openssl) version
