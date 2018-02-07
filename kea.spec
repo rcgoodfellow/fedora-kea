@@ -10,7 +10,7 @@ Name:     kea
 %global LVERSION %{version}-%{prever}
 #%%global VERSION %%{LVERSION}
 Version:  1.3.0
-Release:  5%{?dist}
+Release:  6%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{LVERSION}/kea-%{LVERSION}.tar.gz
@@ -271,6 +271,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.0-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Wed Jan 31 2018 Pavel Zhukov <landgraf@fedoraproject.org> - 1.3.0-4
 - Fix build with boost 1.66 (#1540331)
 
