@@ -1,19 +1,13 @@
 #http://lists.fedoraproject.org/pipermail/devel/2011-August/155358.html
 %global _hardened_build 1
 
-%global prever beta
-
-
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
-#%%global VERSION %%{LVERSION}-%%{patchver}
-%global LVERSION %{version}-%{prever}
-#%%global VERSION %%{LVERSION}
 Version:  1.3.0
-Release:  6%{?dist}
+Release:  7%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
-Source0:  http://ftp.isc.org/isc/kea/%{LVERSION}/kea-%{LVERSION}.tar.gz
+Source0:  http://ftp.isc.org/isc/kea/%{version}/kea-%{version}.tar.gz
 
 # http://kea.isc.org/ticket/3529
 Patch0:   kea-systemd.patch
@@ -90,7 +84,7 @@ Requires: pkgconfig
 Header files and API documentation.
 
 %prep
-%setup -q -n kea-%{LVERSION}
+%setup -q -n kea-%{version}
 %patch0 -p1 -b .systemd
 %patch1 -p1 -b .hooksdir
 %patch2 -p1 -b .openssl
@@ -186,8 +180,11 @@ EOF
 %{_unitdir}/kea-dhcp6.service
 %{_unitdir}/kea-dhcp-ddns.service
 %dir %{_sysconfdir}/kea/
-%config(noreplace) %{_sysconfdir}/kea/kea.conf
+%config(noreplace) %{_sysconfdir}/kea/kea-ctrl-agent.conf
 %config(noreplace) %{_sysconfdir}/kea/keactrl.conf
+%config(noreplace) %{_sysconfdir}/kea/kea-dhcp4.conf
+%config(noreplace) %{_sysconfdir}/kea/kea-dhcp6.conf
+%config(noreplace) %{_sysconfdir}/kea/kea-dhcp-ddns.conf
 %dir %{_datarootdir}/kea/
 %{_datarootdir}/kea/scripts
 %dir /run/kea/
@@ -213,7 +210,6 @@ EOF
 %{_mandir}/man8/keactrl.8.gz
 %{_mandir}/man8/perfdhcp.8.gz
 %{_mandir}/man8/kea-ctrl-agent.8.gz
-%{_mandir}/man8/kea-shell.8.gz
 
 %files hooks
 %dir %{_libdir}/%{name}
@@ -242,12 +238,8 @@ EOF
 %{_libdir}/libkea-threads.so.*
 %{_libdir}/libkea-util-io.so.*
 %{_libdir}/libkea-util.so.*
-%{_libdir}/libkea-http.so
-%{_libdir}/libkea-http.so.0
-%{_libdir}/libkea-http.so.0.0.0
-%{_libdir}/libkea-process.so
-%{_libdir}/libkea-process.so.0
-%{_libdir}/libkea-process.so.0.0.0
+%{_libdir}/libkea-http.so*
+%{_libdir}/libkea-process.so*
 
 %files devel
 %{_includedir}/kea
@@ -271,6 +263,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Wed Feb 14 2018 Pavel Zhukov <landgraf@fedoraproject.org> - 1.3.0-7
+- Package released version (#1545096)
+
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.0-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
