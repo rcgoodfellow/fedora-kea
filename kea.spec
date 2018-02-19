@@ -4,7 +4,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  1.3.0
-Release:  7%{?dist}
+Release:  8%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{version}/kea-%{version}.tar.gz
@@ -18,6 +18,7 @@ Patch3:   kea-boost_1.66.patch
 # autoreconf
 BuildRequires: autoconf automake libtool
 BuildRequires: boost-devel
+BuildRequires: gcc-c++
 # %%configure --with-openssl
 BuildRequires: compat-openssl10-devel
 # %%configure --with-dhcp-mysql
@@ -263,6 +264,9 @@ EOF
 %{_libdir}/pkgconfig/dns++.pc
 
 %changelog
+* Mon Feb 19 2018 Pavel Zhukov <pzhukov@redhat.com> - 1.3.0-8
+- Add gcc-c++ BR
+
 * Wed Feb 14 2018 Pavel Zhukov <landgraf@fedoraproject.org> - 1.3.0-7
 - Package released version (#1545096)
 
