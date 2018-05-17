@@ -55,7 +55,7 @@ index 0000000..d1e0526
 +After=time-sync.target
 +
 +[Service]
-+ExecStart=@sbindir@/kea-dhcp-ddns -c @sysconfdir@/kea/kea.conf
++ExecStart=@sbindir@/kea-dhcp-ddns -c @sysconfdir@/kea/kea-dhcp-ddns.conf
 +
 +[Install]
 +WantedBy=multi-user.target
@@ -73,7 +73,7 @@ index 0000000..80977d6
 +After=time-sync.target
 +
 +[Service]
-+ExecStart=@sbindir@/kea-dhcp4 -c @sysconfdir@/kea/kea.conf
++ExecStart=@sbindir@/kea-dhcp4 -c @sysconfdir@/kea/kea-dhcp4.conf
 +
 +[Install]
 +WantedBy=multi-user.target
@@ -91,7 +91,7 @@ index 0000000..c24f584
 +After=time-sync.target
 +
 +[Service]
-+ExecStart=@sbindir@/kea-dhcp6 -c @sysconfdir@/kea/kea.conf
++ExecStart=@sbindir@/kea-dhcp6 -c @sysconfdir@/kea/kea-dhcp6.conf
 +
 +[Install]
 +WantedBy=multi-user.target
