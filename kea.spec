@@ -22,7 +22,7 @@ BuildRequires: gcc-c++
 # %%configure --with-openssl
 BuildRequires: compat-openssl10-devel
 # %%configure --with-dhcp-mysql
-BuildRequires: mariadb-connector-c-devel
+BuildRequires: community-mysql-devel
 # %%configure --with-dhcp-pgsql
 BuildRequires: postgresql-devel
 BuildRequires: log4cplus-devel
