@@ -266,7 +266,7 @@ EOF
 %{_libdir}/%{name}/hooks/libdhcp_stat_cmds.so
 
 %changelog
-* Sun Aug 05 2018 Ryan Goodfellow <rgoodfel@isi.edu>  - 1.4.0-1
+* Sun Aug 05 2018 Ryan Goodfellow <rgoodfel@isi.edu> - 1.4.0-1
 - Initial 1.4 support
 
 * Fri Jun 08 2018 Ryan Goodfellow <rgoodfel@isi.edu> - 1.3.0-10
