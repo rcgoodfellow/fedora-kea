@@ -3,17 +3,19 @@
 
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
-Version:  1.3.0
-Release:  9%{?dist}
+Version:  1.4.0
+Release:  1%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/%{version}/kea-%{version}.tar.gz
 
 # http://kea.isc.org/ticket/3529
 Patch0:   kea-systemd.patch
-Patch1:   kea-1.3.0-hooksdir.patch
-Patch2:   kea-openssl.patch
-Patch3:   kea-boost_1.66.patch
+Patch1:   kea-1.4.0-hooksdir.patch
+Patch2:   kea-1.4.0-hadir.patch
+Patch3:   kea-1.4.0-stats.patch
+#Patch4:   kea-openssl.patch
+#Patch5:   kea-boost_1.66.patch
 
 # autoreconf
 BuildRequires: autoconf automake libtool
@@ -88,8 +90,10 @@ Header files and API documentation.
 %setup -q -n kea-%{version}
 %patch0 -p1 -b .systemd
 %patch1 -p1 -b .hooksdir
-%patch2 -p1 -b .openssl
-%patch3 -p1 -b .boost
+%patch2 -p1 -b .hadir
+%patch3 -p1 -b .stats
+#%patch4 -p1 -b .openssl
+#%patch5 -p1 -b .boost
 
 # install leases db in /var/lib/kea/ not /var/kea/
 # http://kea.isc.org/ticket/3523
@@ -190,9 +194,6 @@ EOF
 %{_datarootdir}/kea/scripts
 %dir /run/kea/
 %{_tmpfilesdir}/kea.conf
-%{_datarootdir}/kea/dhcp-ddns.spec
-%{_datarootdir}/kea/dhcp4.spec
-%{_datarootdir}/kea/dhcp6.spec
 %dir %{_sharedstatedir}/kea
 %config(noreplace) %{_sharedstatedir}/kea/kea-leases4.csv
 %config(noreplace) %{_sharedstatedir}/kea/kea-leases6.csv
@@ -215,13 +216,11 @@ EOF
 %files hooks
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/hooks
+%{_libdir}/%{name}/hooks/libdhcp_ha.so
+%{_libdir}/%{name}/hooks/libdhcp_stat_cmds.so
 
 %files libs
-#%%dir %%{_pkgdocdir}/
-#%%{_pkgdocdir}/COPYING
-#%%{_pkgdocdir}/LICENSE_1_0.txt
 %license COPYING
-%license ext/coroutine/LICENSE_1_0.txt
 %{_libdir}/libkea-asiodns.so.*
 %{_libdir}/libkea-asiolink.so.*
 %{_libdir}/libkea-cc.so.*
@@ -241,6 +240,7 @@ EOF
 %{_libdir}/libkea-util.so.*
 %{_libdir}/libkea-http.so*
 %{_libdir}/libkea-process.so*
+
 
 %files devel
 %{_includedir}/kea
@@ -262,8 +262,16 @@ EOF
 %{_libdir}/libkea-util-io.so
 %{_libdir}/libkea-util.so
 %{_libdir}/pkgconfig/dns++.pc
+%{_libdir}/%{name}/hooks/libdhcp_ha.so
+%{_libdir}/%{name}/hooks/libdhcp_stat_cmds.so
 
 %changelog
+* Sun Aug 05 2018 Ryan Goodfellow <rgoodfel@isi.edu>  - 1.4.0-1
+- Initial 1.4 support
+
+* Fri Jun 08 2018 Ryan Goodfellow <rgoodfel@isi.edu> - 1.3.0-10
+- Fix dysfunctional mariadb library dependency
+
 * Thu May 17 2018 Pavel Zhukov <pzhukov@redhat.com> - 1.3.0-9
 - Fix config files names (#1579298)
 
