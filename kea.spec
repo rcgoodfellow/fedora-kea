@@ -87,7 +87,7 @@ Requires: pkgconfig
 Header files and API documentation.
 
 %prep
-%setup -q -n kea-%{version}
+%setup -q -n kea-1.4.0-P1
 %patch0 -p1 -b .systemd
 %patch1 -p1 -b .hooksdir
 %patch2 -p1 -b .hadir
