@@ -14,7 +14,7 @@ Patch0:   kea-systemd.patch
 Patch1:   kea-1.4.0-hooksdir.patch
 Patch2:   kea-1.4.0-hadir.patch
 Patch3:   kea-1.4.0-stats.patch
-#Patch4:   kea-openssl.patch
+Patch4:   kea-openssl.patch
 #Patch5:   kea-boost_1.66.patch
 
 # autoreconf

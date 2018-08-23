@@ -1,12 +1,12 @@
 diff --git a/m4macros/ax_crypto.m4 b/m4macros/ax_crypto.m4
-index dd4a81f..04dd2c8 100644
+index fe91b1f93..0a7cf9721 100644
 --- a/m4macros/ax_crypto.m4
 +++ b/m4macros/ax_crypto.m4
-@@ -284,7 +284,7 @@ then
+@@ -383,7 +383,7 @@ then
  else
     CRYPTO_NAME="OpenSSL"
     DISABLED_CRYPTO="Botan"
--   CRYPTO_PACKAGE="openssl-1.0.2"
+-   CRYPTO_PACKAGE="openssl-1.1.0"
 +   CRYPTO_PACKAGE="openssl"
     AC_DEFINE_UNQUOTED([WITH_OPENSSL], [], [Compile with OpenSSL crypto])
     AC_MSG_CHECKING(for OpenSSL library)
