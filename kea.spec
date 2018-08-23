@@ -92,7 +92,7 @@ Header files and API documentation.
 %patch1 -p1 -b .hooksdir
 %patch2 -p1 -b .hadir
 %patch3 -p1 -b .stats
-#%patch4 -p1 -b .openssl
+%patch4 -p1 -b .openssl
 #%patch5 -p1 -b .boost
 
 # install leases db in /var/lib/kea/ not /var/kea/
