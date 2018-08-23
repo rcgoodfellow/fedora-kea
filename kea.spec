@@ -3,11 +3,11 @@
 
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
-Version:  1.4.0
+Version:  1.4.0_P1
 Release:  1%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
-Source0:  http://ftp.isc.org/isc/kea/%{version}/kea-%{version}.tar.gz
+Source0:  http://ftp.isc.org/isc/kea/1.4.0-P1/kea-1.4.0-P1.tar.gz
 
 # http://kea.isc.org/ticket/3529
 Patch0:   kea-systemd.patch
@@ -87,7 +87,7 @@ Requires: pkgconfig
 Header files and API documentation.
 
 %prep
-%setup -q -n kea-%{version}
+%setup -q -n kea-1.4.0-P1
 %patch0 -p1 -b .systemd
 %patch1 -p1 -b .hooksdir
 %patch2 -p1 -b .hadir
