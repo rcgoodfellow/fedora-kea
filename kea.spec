@@ -4,7 +4,7 @@
 Summary:  DHCPv4, DHCPv6 and DDNS server from ISC
 Name:     kea
 Version:  1.4.0_P1
-Release:  1%{?dist}
+Release:  2%{?dist}
 License:  MPLv2.0 and Boost
 URL:      http://kea.isc.org
 Source0:  http://ftp.isc.org/isc/kea/1.4.0-P1/kea-1.4.0-P1.tar.gz
