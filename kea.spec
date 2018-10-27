@@ -22,7 +22,7 @@ BuildRequires: autoconf automake libtool
 BuildRequires: boost-devel
 BuildRequires: gcc-c++
 # %%configure --with-openssl
-BuildRequires: compat-openssl10-devel
+BuildRequires: openssl-devel
 # %%configure --with-dhcp-mysql
 BuildRequires: community-mysql-devel
 # %%configure --with-dhcp-pgsql
@@ -80,7 +80,7 @@ Summary: Development headers and libraries for Kea DHCP server
 Requires: kea-libs%{?_isa} = %{version}-%{release}
 # to build hooks (#1335900)
 Requires: boost-devel
-Requires: compat-openssl10-devel
+Requires: openssl-devel
 Requires: pkgconfig
 
 %description devel
@@ -266,6 +266,9 @@ EOF
 %{_libdir}/%{name}/hooks/libdhcp_stat_cmds.so
 
 %changelog
+* Sun Oct 27 2018 Ryan Goodfellow <rgoodfel@isi.edu> - 1.4.0-2
+  Fix openssl deps
+
 * Sun Aug 05 2018 Ryan Goodfellow <rgoodfel@isi.edu> - 1.4.0-1
 - Initial 1.4 support
 
